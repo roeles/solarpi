@@ -88,7 +88,7 @@ int main(int argc, char ** argv)
 		const char * command = "pc.solar.getparams";
 		const size_t command_length = strlen(command);
 
-		const char * expected_response = "solar.pc.sendparams";
+		const char * expected_response = "solar.pc.sendparams.";
 		const size_t expected_response_length = strlen(expected_response);
 
 		const size_t response_length = 1024; //18+27;
