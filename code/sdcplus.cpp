@@ -34,6 +34,7 @@ int main(int argc, char ** argv)
 	const char * delim = ",";
 	struct termios m_oldtio,m_newtio;
 
+
 	if(argc < 3)
 	{
 		fprintf(stderr, "Usage: %s device baudrate measure_string init_string\n", argv[0]);
@@ -44,11 +45,10 @@ int main(int argc, char ** argv)
 
 	if(argc > 3)	monitor_command = argv[3];
 	if(argc > 4)	init_command = argv[4];
-	const size_t monitor_command_length 	= (monitor_command == NULL ? 0 : strlen(monitor_command));
-	const size_t init_command_length 	= (init_command == NULL ? 0 : strlen(init_command));
+	//const size_t monitor_command_length 	= (monitor_command == NULL ? 0 : strlen(monitor_command));
+	//const size_t init_command_length 	= (init_command == NULL ? 0 : strlen(init_command));
 
 	const size_t line_buffer_length = 256;
-	char line_buffer[line_buffer_length];
 	int serial_port = open(argv[1], O_RDWR | O_NOCTTY);
 	if(serial_port == -1)
 	{
@@ -76,11 +76,11 @@ int main(int argc, char ** argv)
 //	sendcommand(serial_port, init_command, init_command_length);
 	while(true)
 	{
-		const char * command = "pc.solar.getparams"'
+		const char * command = "pc.solar.getparams";
 		const size_t command_length = strlen(command);
 
 		const size_t response_length = 18+24;
-		char * response[response_length];
+		char response[response_length];
 
 		struct timespec time_before, time_after;
 		clock_gettime(CLOCK_REALTIME, &time_before);
