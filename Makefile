@@ -2,7 +2,7 @@ DEPS=Makefile
 
 all: code 
 
-code: bin/sdcplus
+code: bin/scdplus
 
 imgclean:
 	rm -f img/*.pdf
