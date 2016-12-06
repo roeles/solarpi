@@ -15,25 +15,16 @@ using namespace std;
 
 #define BAUDRATE B9600
 
-void sendcommand(int fd, const char * buf, const size_t len)
+size_t sendcommand(int fd, const char * buf, const size_t len, char * recv_buf, const size_t recv_len)
 {
-	write(fd, buf, len);
-	write(fd, "\n", 1);
-}
-
-size_t readline(int fd, char * buf, size_t len, const char delim)
-{
-	size_t i=0;
-	for(i=0; i < len; i++)
+	const size_t write_result = write(fd, buf, len);
+	if(write_result < 0)
 	{
-		const int read_result = read(fd, &buf[i], 1);
-		if(read_result != 1)
-			break;
-		else if(buf[i] == delim)
-			break;
+		fprintf(stderr, "%s: write(2) failed %d %s\n",  __PRETTY_FUNCTION__, errno, strerror(errno));
+		return 0;
 	}
-	buf[i] = '\0';
-	return i;
+	const size_t read_result = read(fd, recv_buf, recv_len);
+	return read_result;
 }
 
 int main(int argc, char ** argv)
@@ -82,20 +73,25 @@ int main(int argc, char ** argv)
 		return -1;
 	}
 
-	sendcommand(serial_port, init_command, init_command_length);
+//	sendcommand(serial_port, init_command, init_command_length);
 	while(true)
 	{
+		const char * command = "pc.solar.getparams"'
+		const size_t command_length = strlen(command);
+
+		const size_t response_length = 18+24;
+		char * response[response_length];
+
 		struct timespec time_before, time_after;
 		clock_gettime(CLOCK_REALTIME, &time_before);
 
-		if(monitor_command != NULL)
-			sendcommand(serial_port, monitor_command, monitor_command_length);
-		readline(serial_port, line_buffer, line_buffer_length, '\n');
-	
+		const size_t command_result = sendcommand(serial_port, command, command_length, response, response_length);
+			
 		clock_gettime(CLOCK_REALTIME, &time_after);
 //		printf("%d,%d,%d,%d,%s\n", time_before.tv_sec, time_before.tv_nsec, time_after.tv_sec, time_after.tv_nsec, line_buffer);
-		cout << time_before.tv_sec << delim << time_before.tv_nsec << delim << time_after.tv_sec << delim << time_after.tv_nsec << delim << line_buffer << endl << flush;
+		cout << time_before.tv_sec << delim << time_before.tv_nsec << delim << time_after.tv_sec << delim << time_after.tv_nsec << delim << command_result << delim << response_length << endl << flush;
 //		fflush(stdout);
+		sleep(1);
 	}
 	
 	return 0;
