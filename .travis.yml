@@ -1,0 +1,6 @@
+install:
+- sudo apt-get update
+- sudo apt-get install texlive texlive-latex-extra texlive-lang-ukenglish latex-xcolor pgf librsvg2-bin gnuplot graphviz python-scipy texlive-science xz-utils xfoil octave
+
+script:
+- make -j8
