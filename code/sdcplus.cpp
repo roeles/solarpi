@@ -23,6 +23,7 @@ size_t sendcommand(int fd, const char * buf, const size_t len, char * recv_buf, 
 		fprintf(stderr, "%s: write(2) failed %d %s\n",  __PRETTY_FUNCTION__, errno, strerror(errno));
 		return 0;
 	}
+	sleep(1);
 	const size_t read_result = read(fd, recv_buf, recv_len);
 	return read_result;
 }
@@ -74,24 +75,64 @@ int main(int argc, char ** argv)
 	}
 
 //	sendcommand(serial_port, init_command, init_command_length);
+	cout << "time_before.tv_sec" << delim << "time_before.tv_nsec" << delim << "time_after.tv_sec" << delim << "time_after.tv_nsec" << delim;
+	cout << "stage1_voltage" << delim << "stage2_voltage" << delim << "stage3_voltage" << delim;
+	cout << "stage1_length" << delim << "stage2_length" << delim;
+	cout << "discharge_threshold_low" << delim << "discharge_threshold_high" << delim;
+	cout << "year" << delim << "month" << delim << "dom" << delim << "hour" << delim << "minute" << delim << "sec" << delim;
+	cout << "ah100" << delim << "ah" << delim;
+	cout << "kwh100" << delim << "kwh" << endl << flush;
+
 	while(true)
 	{
 		const char * command = "pc.solar.getparams";
 		const size_t command_length = strlen(command);
 
-		const size_t response_length = 18+24;
+		const char * expected_response = "solar.pc.sendparams";
+		const size_t expected_response_length = strlen(expected_response);
+
+		const size_t response_length = 1024; //18+27;
 		char response[response_length];
 
 		struct timespec time_before, time_after;
 		clock_gettime(CLOCK_REALTIME, &time_before);
 
 		const size_t command_result = sendcommand(serial_port, command, command_length, response, response_length);
-			
+	
+		const char * response_values = &response[expected_response_length];
+		const unsigned int stage1_voltage 	= response_values[0] + 79;
+		const unsigned int stage2_voltage 	= response_values[1] + 79;
+		const unsigned int stage3_voltage 	= response_values[2] + 79;
+		const unsigned int stage1_length	= response_values[3] - 1;
+		const unsigned int stage2_length 	= response_values[4] - 1;
+		const unsigned int dis_lo_thres	= response_values[5] + 79;
+		const unsigned int dis_hi_thres	= response_values[6] + 79;
+		
+		const unsigned int year		= ((unsigned int)response_values[14]) + 1999;
+		const unsigned int month	= ((unsigned int)response_values[15]) + 1;
+		const unsigned int dom		= ((unsigned int)response_values[16]) + 1;
+		const unsigned int hour		= ((unsigned int)response_values[17]) + 1;
+		const unsigned int min		= ((unsigned int)response_values[18]) + 1;
+		const unsigned int sec		= ((unsigned int)response_values[19]) + 1;
+
+		const unsigned ah100		= ((unsigned int)response_values[20])-1;
+		const unsigned ah		= ((unsigned int)response_values[21])-1;
+		
+		const unsigned kwh100		= ((unsigned int)response_values[22])-1;
+		const unsigned kwh		= ((unsigned int)response_values[23])-1;
+
+
+	
 		clock_gettime(CLOCK_REALTIME, &time_after);
 //		printf("%d,%d,%d,%d,%s\n", time_before.tv_sec, time_before.tv_nsec, time_after.tv_sec, time_after.tv_nsec, line_buffer);
-		cout << time_before.tv_sec << delim << time_before.tv_nsec << delim << time_after.tv_sec << delim << time_after.tv_nsec << delim << command_result << delim << response_length << endl << flush;
+		cout << time_before.tv_sec << delim << time_before.tv_nsec << delim << time_after.tv_sec << delim << time_after.tv_nsec << delim;
+		cout << stage1_voltage << delim << stage2_voltage << delim << stage3_voltage << delim;
+		cout << stage1_length << delim << stage2_length << delim;
+		cout << dis_lo_thres << delim << dis_hi_thres << delim;
+		cout << year << delim << month << delim << dom << delim << hour << delim << min << delim << sec << delim;
+		cout << ah100 << delim << ah << delim;
+		cout << kwh100 << delim << kwh << endl << flush;
 //		fflush(stdout);
-		sleep(1);
 	}
 	
 	return 0;
