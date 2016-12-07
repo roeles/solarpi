@@ -122,7 +122,8 @@ int main(int argc, char ** argv)
 		const unsigned kwh100		= ((unsigned int)response_values[22])-1;
 		const unsigned kwh		= ((unsigned int)response_values[23])-1;
 
-
+		const char * command_getdata = "pc.solar.getdata";
+		const size_t command_getdata_length = strlen(command_getdata);
 	
 		clock_gettime(CLOCK_REALTIME, &time_after);
 //		printf("%d,%d,%d,%d,%s\n", time_before.tv_sec, time_before.tv_nsec, time_after.tv_sec, time_after.tv_nsec, line_buffer);
@@ -132,7 +133,20 @@ int main(int argc, char ** argv)
 		cout << dis_lo_thres << delim << dis_hi_thres << delim;
 		cout << year << delim << month << delim << dom << delim << hour << delim << min << delim << sec << delim;
 		cout << ah100 << delim << ah << delim;
-		cout << kwh100 << delim << kwh << endl << flush;
+		cout << kwh100 << delim << kwh;
+
+		const char * command_getdata_expected_response = "solar.pc.senddata";
+		const size_t command_getdata_expected_response_length = strlen(command_getdata_expected_response);
+
+		const size_t command_getdata_result = sendcommand(serial_port, command_getdata, command_getdata_length, response, response_length);
+		
+		for(size_t i=command_getdata_expected_response_length; i<command_getdata_result; i++)
+			cout << ((unsigned int)response[i]) << ",";
+
+
+
+
+		cout << endl << flush;
 //		fflush(stdout);
 	}
 	
