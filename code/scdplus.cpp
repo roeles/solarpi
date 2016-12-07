@@ -75,6 +75,7 @@ int main(int argc, char ** argv)
 	}
 
 //	sendcommand(serial_port, init_command, init_command_length);
+/*
 	cout << "time_before.tv_sec" << delim << "time_before.tv_nsec" << delim << "time_after.tv_sec" << delim << "time_after.tv_nsec" << delim;
 	cout << "stage1_voltage" << delim << "stage2_voltage" << delim << "stage3_voltage" << delim;
 	cout << "stage1_length" << delim << "stage2_length" << delim;
@@ -82,8 +83,8 @@ int main(int argc, char ** argv)
 	cout << "year" << delim << "month" << delim << "dom" << delim << "hour" << delim << "minute" << delim << "sec" << delim;
 	cout << "ah100" << delim << "ah" << delim;
 	cout << "kwh100" << delim << "kwh" << endl << flush;
-
-	while(true)
+*/
+//	while(true)
 	{
 		const char * command = "pc.solar.getparams";
 		const size_t command_length = strlen(command);
