@@ -1,0 +1,2 @@
+time_before.tv_sec,time_before.tv_nsec,time_after.tv_sec,time_after.tv_nsec,stage1_voltage,stage2_voltage,stage3_voltage,stage1_length,stage2_length,discharge_threshold_low,discharge_threshold_high,year,month,dom,hour,minute,sec,ah100,ah,kwh100,kwh
+1481107452,185661814,1481107453,185850199,142,138,132,4,17,105,120,2012,3,3,16,25,14,0,0,0,0
