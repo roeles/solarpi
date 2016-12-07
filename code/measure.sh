@@ -8,5 +8,7 @@ cd ..
 
 ./code/enable_usb.sh
 sleep 10
-./bin/scdplus /dev/ttyACM0 9600 | nc 192.168.178.36 1234 
+./bin/scdplus /dev/ttyACM0 9600 >> ./data/solarpi.csv
 ./code/disable_usb.sh
+rsync ./data/solarpi.csv rsync://192.168.178.36/data/solarpi
+
