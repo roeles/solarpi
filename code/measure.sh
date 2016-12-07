@@ -6,6 +6,10 @@ MY_PATH="`( cd \"$MY_PATH\" && pwd )`"
 cd $MY_PATH
 cd ..
 
+git pull
+make
+
+
 ./code/enable_usb.sh
 sleep 10
 ./bin/scdplus /dev/ttyACM0 9600 >> ./data/solarpi.csv
