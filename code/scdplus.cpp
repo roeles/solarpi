@@ -30,27 +30,17 @@ size_t sendcommand(int fd, const char * buf, const size_t len, char * recv_buf, 
 
 int main(int argc, char ** argv)
 {
-	char * monitor_command = NULL;
-	char * init_command = NULL;
 	const char * delim = ",";
 	struct termios m_oldtio,m_newtio;
 
 
 	if(argc < 3)
 	{
-		fprintf(stderr, "Usage: %s device baudrate measure_string init_string\n", argv[0]);
-		fprintf(stderr, "Usage: %s device baudrate measure_string\n", argv[0]);
 		fprintf(stderr, "Usage: %s device baudrate\n", argv[0]);
 		return -1;
 	}	
 
-	if(argc > 3)	monitor_command = argv[3];
-	if(argc > 4)	init_command = argv[4];
-	//const size_t monitor_command_length 	= (monitor_command == NULL ? 0 : strlen(monitor_command));
-	//const size_t init_command_length 	= (init_command == NULL ? 0 : strlen(init_command));
-
-	const size_t line_buffer_length = 256;
-	int serial_port = open(argv[1], O_RDWR | O_NOCTTY);
+	const int serial_port = open(argv[1], O_RDWR | O_NOCTTY);
 	if(serial_port == -1)
 	{
 		fprintf(stderr, "%s: error in open(2): %d %s\n", __PRETTY_FUNCTION__, errno, strerror(errno));
@@ -99,6 +89,8 @@ int main(int argc, char ** argv)
 		clock_gettime(CLOCK_REALTIME, &time_before);
 
 		const size_t command_result = sendcommand(serial_port, command, command_length, response, response_length);
+		if(command_result < 1)
+			return -1;
 	
 		const char * response_values = &response[expected_response_length];
 		const unsigned int stage1_voltage 	= response_values[0] + 79;
@@ -139,9 +131,11 @@ int main(int argc, char ** argv)
 		const size_t command_getdata_expected_response_length = strlen(command_getdata_expected_response);
 
 		const size_t command_getdata_result = sendcommand(serial_port, command_getdata, command_getdata_length, response, response_length);
-		
-		for(size_t i=command_getdata_expected_response_length; i<command_getdata_result; i++)
-			cout << ((unsigned int)response[i]) << ",";
+		if(command_getdata_result > 0)
+		{
+			for(size_t i=command_getdata_expected_response_length; i<command_getdata_result; i++)
+				cout << ((unsigned int)response[i]) << ",";
+		}
 
 
 
