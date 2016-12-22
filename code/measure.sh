@@ -7,7 +7,7 @@ cd ..
 
 ./code/disable_hdmi.sh
 ./code/enable_usb.sh
-sleep 10
+sleep 3
 ./bin/scdplus /dev/ttyACM0 9600 >> ./data/solarpi.csv
 ./code/disable_usb.sh
 
