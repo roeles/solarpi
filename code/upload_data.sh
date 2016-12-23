@@ -2,6 +2,7 @@
 
 
 /sbin/ifup wlan0
+sleep 60
 
 
 MY_PATH="`dirname \"$0\"`"
@@ -14,5 +15,4 @@ make
 
 rsync ./data/solarpi.csv rsync://192.168.178.36/data/solarpi
 
-sleep 60
 /sbin/ifdown wlan0 
