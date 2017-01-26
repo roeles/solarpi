@@ -125,8 +125,11 @@ int main(int argc, char ** argv)
 		cout << dis_lo_thres << delim << dis_hi_thres << delim;
 		cout << year << delim << month << delim << dom << delim << hour << delim << min << delim << sec << delim;
 		cout << ah100 << delim << ah << delim;
-		cout << kwh100 << delim << kwh;
+		cout << kwh100 << delim << kwh << delim;
 
+		for(size_t i=expected_response_length; i<command_result; i++)
+				cout << (unsigned int)response[i] << ",";
+		
 		const char * command_getdata_expected_response = "solar.pc.senddata";
 		const size_t command_getdata_expected_response_length = strlen(command_getdata_expected_response);
 
@@ -136,7 +139,6 @@ int main(int argc, char ** argv)
 			for(size_t i=command_getdata_expected_response_length; i<command_getdata_result; i++)
 				cout << ((unsigned int)response[i]) << ",";
 		}
-
 
 
 
