@@ -10,9 +10,9 @@ MY_PATH="`( cd \"$MY_PATH\" && pwd )`"
 cd $MY_PATH
 cd ..
 
-#git pull
-#make
+git pull
+make
 
-rsync -z ./data/solarpi.csv rsync://192.168.178.36/data/solarpi
+rsync -z ./data/solarpi.csv -e ssh solarpi@cumulus-humilis.nl:/home/archive/data/solarpi
 
 /sbin/ifdown wlan0 
