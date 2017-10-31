@@ -1,11 +1,12 @@
 #!/bin/bash
 
+date
 
 /sbin/ifup wlan0
 sleep 60
 
 SERVER=8.8.8.8
-ping -c10 ${SERVER} > /dev/null
+ping -c10 ${SERVER}
 
 if [ $? != 0 ]
 then
@@ -20,8 +21,9 @@ cd $MY_PATH
 cd ..
 
 git pull
-make
+#make
 
-rsync --progress -z ./data/solarpi.csv -e ssh solarpi@baardman.net:/home/archive/data/solarpi
+rsync -z ./data/solarpi.csv -e ssh solarpi@baardman.net:/home/archive/data/solarpi
+rsync -z ./data/solarpi.log -e ssh solarpi@baardman.net:/home/archive/data/solarpi
 
 /sbin/ifdown --force wlan0 
