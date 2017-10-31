@@ -1,6 +1,7 @@
 #!/bin/bash
 
 date
+uptime
 
 /sbin/ifup wlan0
 sleep 60
