@@ -3,8 +3,8 @@
 date
 uptime
 
-/sbin/ifup wlan0
-sleep 60
+#/sbin/ifup wlan0
+#sleep 60
 
 SERVER=8.8.8.8
 ping -c10 ${SERVER}
@@ -27,4 +27,4 @@ git pull
 rsync -z ./data/solarpi.csv -e ssh solarpi@baardman.net:/home/archive/data/solarpi
 rsync -z ./data/solarpi.log -e ssh solarpi@baardman.net:/home/archive/data/solarpi
 
-/sbin/ifdown --force wlan0 
+#/sbin/ifdown --force wlan0 
